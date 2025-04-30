@@ -1,1 +1,1 @@
-# sequential_ELAN-CSV_correction
+# sequential ELAN-CSV correction

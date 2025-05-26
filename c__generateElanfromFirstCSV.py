@@ -2,8 +2,6 @@ import os
 import pandas as pd
 import pympi
 
-
-
 def generateElanfromFirstCSV(video_name):
     input_folder = "videos"
     #video_name = "JERSON-FINAL.MP4"
@@ -18,6 +16,8 @@ def generateElanfromFirstCSV(video_name):
 
     df = pd.read_csv(correccion_csv_path, sep=";", encoding="latin1")
     df = df.dropna()
+    df = df.sort_values(by="start_frame")
+
     annotations = []
 
     for idx, row in df.iterrows():
@@ -50,3 +50,6 @@ def generateElanfromFirstCSV(video_name):
 
     # Guardar el archivo ELAN (EAF)
     eaf.to_file(elan_path)
+
+
+generateElanfromFirstCSV("4. JUNIOR-FINAL.mp4")

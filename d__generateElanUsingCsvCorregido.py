@@ -15,7 +15,9 @@ def generateElanUsingCsvCorregido(video_name):
 
     eaf.add_linked_file(full_video_path, full_video_path, "video/mp4", 0)
 
-    df = pd.read_csv(correccion_csv_path, sep=";", encoding="latin1")
+    df = pd.read_csv(correccion_csv_path, sep=";", encoding="latin1")  
+    df.dropna(inplace=True)
+    df = df.sort_values(by="start_frame")
 
     annotations = []
 
@@ -26,9 +28,8 @@ def generateElanUsingCsvCorregido(video_name):
 
         n_frames = end_frame - start_frame
 
-        eafFileName = segment_file.replace(".MP4", ".eaf")
-
         if '_a_' in segment_file:
+
             label_extra = 'seña'
             name = segment_file.split("_a_")[0]
             temp_n_frames =  end_frame - start_frame
@@ -37,7 +38,6 @@ def generateElanUsingCsvCorregido(video_name):
             label_extra = 'oración'
             name = segment_file.split("_b_")[0]
             formula = np.maximum(np.log(temp_n_frames/n_frames), 0)
-
 
         annotations.append((start_frame, end_frame, name, label_extra))
 
@@ -59,3 +59,5 @@ def generateElanUsingCsvCorregido(video_name):
         os.remove(elan_path)
     # Guardar el archivo ELAN (EAF)
     eaf.to_file(elan_path)
+
+generateElanUsingCsvCorregido("5_JERSON-FINAL.mp4")

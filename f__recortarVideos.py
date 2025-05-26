@@ -3,10 +3,9 @@ import pandas as pd
 import pympi
 
 from moviepy.video.io.VideoFileClip import VideoFileClip
-from commandLineSystem import select_videoName
 
 def recortarVideos(video_name):
-    video_name = select_videoName()[0]
+
     input_folder = "videos"
 
 
@@ -30,21 +29,28 @@ def recortarVideos(video_name):
         start_frame = row["start_frame"]
         end_frame = row["end_frame"]
 
-        eafFileName = segment_file.replace(".MP4", ".eaf")
-
+        num = int(segment_file.split("_")[0])
+        if num < 88:
+            continue
+        print(segment_file)
         if 'seña' in segment_file:
             name = segment_file.split("_a_")[0]
+            tier = 'seña'
         elif 'oración' in segment_file:
             name = segment_file.split("_b_")[0]
+            tier = 'oración'
 
-
-        annotations.append((start_frame, end_frame, name))
+        annotations.append((start_frame, end_frame, name, tier))
 
     video = VideoFileClip(full_video_path)
 
-    for start_frame, end_frame, label in annotations:
+    for start_frame, end_frame, label, tier in annotations:
         start_time = start_frame / fps
         end_time = end_frame / fps
         subclip = video.subclipped(start_time, end_time)
-        output_filename = os.sep.join([output_csv_path, f"{label}.mp4"])
+        output_filename = os.sep.join([output_csv_path, tier, f"{label}.mp4"])
+        os.makedirs(os.path.dirname(output_filename), exist_ok=True)
         subclip.write_videofile(output_filename, codec="libx264")
+    subclip.close()
+
+recortarVideos("5_JERSON-FINAL.MP4")

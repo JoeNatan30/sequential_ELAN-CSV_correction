@@ -2,7 +2,7 @@ import pympi
 import pandas as pd
 import numpy as np
 import os
-from commandLineSystem import select_videoName
+
 
 def generarCsvFromElanFinal(video_name):
 
@@ -65,3 +65,6 @@ def generarCsvFromElanFinal(video_name):
 
     # Exportamos a CSV
     df.to_csv(correccion_csv_path, index=False, encoding="latin1", sep=";")
+
+
+generarCsvFromElanFinal("5_JERSON-FINAL.mp4")

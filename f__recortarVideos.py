@@ -4,6 +4,8 @@ import pympi
 
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
+from commandLineSystem import select_videoName
+
 def recortarVideos(video_name):
 
     input_folder = "videos"
@@ -53,4 +55,5 @@ def recortarVideos(video_name):
         subclip.write_videofile(output_filename, codec="libx264")
     subclip.close()
 
-recortarVideos("5_JERSON-FINAL.MP4")
+video_name = select_videoName()[0]
+recortarVideos(video_name)

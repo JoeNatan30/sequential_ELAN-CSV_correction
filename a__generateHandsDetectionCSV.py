@@ -5,6 +5,8 @@ from collections import deque
 import pandas as pd
 from tqdm import tqdm
 
+from commandLineSystem import select_videoName
+
 BaseOptions = mp.tasks.BaseOptions
 HandLandmarker = mp.tasks.vision.HandLandmarker
 HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
@@ -20,7 +22,7 @@ options = HandLandmarkerOptions(
 )
 
 input_folder = "videos"
-video_name = "2_SEBASTIAN-FINAL.MP4"
+video_name = select_videoName()[0]
 
 full_video_path = os.sep.join([input_folder, "originales", video_name])
 print("Video:", full_video_path)

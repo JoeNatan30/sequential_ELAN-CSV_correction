@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import pympi
 
+from commandLineSystem import select_videoName
+
 def generateElanUsingCsvCorregido(video_name):
 
     input_folder = "videos"
@@ -60,4 +62,5 @@ def generateElanUsingCsvCorregido(video_name):
     # Guardar el archivo ELAN (EAF)
     eaf.to_file(elan_path)
 
-generateElanUsingCsvCorregido("5_JERSON-FINAL.mp4")
+video_name = select_videoName()[0]
+generateElanUsingCsvCorregido(video_name)

@@ -2,9 +2,10 @@ import os
 import pandas as pd
 import pympi
 
+from commandLineSystem import select_videoName
+
 def generateElanfromFirstCSV(video_name):
     input_folder = "videos"
-    #video_name = "JERSON-FINAL.MP4"
 
     full_video_path = os.sep.join(["..","..",input_folder, "originales", video_name])
     correccion_csv_path = os.sep.join([input_folder, "metadata",f"{video_name.split(".")[0]}_seg.csv"])
@@ -32,7 +33,6 @@ def generateElanfromFirstCSV(video_name):
             label_extra = 'oración'
             name = segment_file.split("_b_")[0]
 
-
         annotations.append((start_frame, end_frame, name, label_extra))
 
         fps = 59.94005994005994  # Ejemplo de FPS del video
@@ -52,4 +52,6 @@ def generateElanfromFirstCSV(video_name):
     eaf.to_file(elan_path)
 
 
-generateElanfromFirstCSV("4. JUNIOR-FINAL.mp4")
+video_name = select_videoName()[0]
+
+generateElanfromFirstCSV(video_name)

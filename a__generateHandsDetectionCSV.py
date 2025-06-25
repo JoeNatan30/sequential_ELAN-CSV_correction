@@ -12,7 +12,7 @@ HandLandmarker = mp.tasks.vision.HandLandmarker
 HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
 VisionRunningMode = mp.tasks.vision.RunningMode
 
-# Crear instancia del landmarker en modo imagen
+# to create mediapipe image from the frame
 options = HandLandmarkerOptions(
     base_options=BaseOptions(model_asset_path='./hand_landmarker.task'),
     running_mode=VisionRunningMode.VIDEO,
@@ -50,11 +50,11 @@ with HandLandmarker.create_from_options(options) as landmarker:
         timestamp = int(cap.get(cv2.CAP_PROP_POS_MSEC))
         frame_counter += 1 
 
-        # Crear el objeto de imagen para MediaPipe (se espera SRGB)
+        # to create a mediapipe image from the frame 
         frame_mp = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
         results = landmarker.detect_for_video(frame_mp, timestamp)
 
-        # Determinar si se detectaron manos
+        # determine if hands are detected
         hands_detected = (results.hand_landmarks is not None and len(results.hand_landmarks) > 0)
         # if results.hand_landmarks is not None and len(results.hand_landmarks) > 0:
         #     print(results)
@@ -74,4 +74,4 @@ detection_df = pd.DataFrame({
 
 detection_csv_path = os.sep.join([metadata_path, f"{video_name.split('.')[0]}_dec.csv"]) 
 detection_df.to_csv(detection_csv_path, index=False, sep=';')
-print("Archivo de detecciones guardado en:", detection_csv_path)
+print("file of hands detection saved on:", detection_csv_path)

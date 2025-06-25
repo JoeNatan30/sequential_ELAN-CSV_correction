@@ -15,9 +15,11 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QIcon
 
 def resource_path(relative_path):
-    """Obtiene la ruta absoluta al recurso, necesaria para PyInstaller en modo onefile."""
+    """
+    To obtain the absolute path to the resource, necessary for PyInstaller in onefile mode.
+    """
     try:
-        # sys._MEIPASS es establecido por PyInstaller
+        # sys._MEIPASS is established by PyInstaller
         base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.abspath(".")
@@ -29,11 +31,12 @@ class MainWindow(QMainWindow):
 
         self.create_required_folders()
 
-        # Idioma por defecto: español.
+        # Default language: Spanish.
         self.language = "es"
         self.video_file = None  # Almacena el video seleccionado
 
-        # Diccionario de traducciones con claves adicionales para los títulos de los grupos
+        # Dictionary for translations
+        # Keys are language codes, values are dictionaries with UI texts.
         self.translations = {
             "es": {
                 "title": "Integración: Video, CSV y ELAN",
@@ -93,7 +96,7 @@ class MainWindow(QMainWindow):
     def init_ui(self):
         layout = QVBoxLayout()
 
-        # Sección para cambiar idioma (opcional con íconos)
+        #  ComboBox for language selection (with icons if available)
         self.language_combo = QComboBox()
 
         t = self.translations[self.language]
@@ -109,17 +112,17 @@ class MainWindow(QMainWindow):
         self.language_combo.currentIndexChanged.connect(self.change_language)
         layout.addWidget(self.language_combo)
 
-        # Botón para seleccionar video
+        # botom to select video
         self.btn_select_video = QPushButton()
         self.btn_select_video.clicked.connect(self.select_video)
         layout.addWidget(self.btn_select_video)
 
-        # Etiqueta que muestra el video seleccionado
+        # Label to show selected video
         self.lbl_video_selected = QLabel()
         layout.addWidget(self.lbl_video_selected)
 
-        # Grupo de funciones de procesamiento
-        self.procesar_group = QGroupBox()  # Título se actualizará en update_ui_texts
+        # processing group functions
+        self.procesar_group = QGroupBox()  # To update the tile in the user interface update_ui_texts
         procesar_layout = QVBoxLayout()
         self.btn_elan_corr = QPushButton()
         self.btn_elan_corr.clicked.connect(self.generate_elan)
@@ -146,7 +149,7 @@ class MainWindow(QMainWindow):
         self.abrir_group.setLayout(abrir_layout)
         layout.addWidget(self.abrir_group)
 
-        # Área de logs
+        # Log area
         self.log_area = QTextEdit()
         self.log_area.setReadOnly(True)
         layout.addWidget(self.log_area)
@@ -157,8 +160,8 @@ class MainWindow(QMainWindow):
 
     def create_required_folders(self):
         """
-        Crea el folder "videos" y dentro de él los subfolders "correcciones", "originales" y "ELAN_files".
-        Si ya existen, no realiza ninguna acción.
+        to create the required folders for the application. 
+        if these folders already exist, it does nothing.
         """
         base_folder = "videos"
         subfolders = ["correcciones", "originales", "ELAN_files"]
@@ -174,7 +177,7 @@ class MainWindow(QMainWindow):
         self.btn_csv_from_elan_final.setText(t["btn_csv_from_elan_final"])
         self.btn_open_csv.setText(t["btn_open_csv"])
         self.btn_open_elan.setText(t["btn_open_elan"])
-        # Actualizar títulos de los QGroupBox
+        # to update QGroupBox titles
         self.procesar_group.setTitle(t["group_procesamiento"])
         self.abrir_group.setTitle(t["group_abrir_archivos"])
         if self.video_file:
@@ -201,8 +204,8 @@ class MainWindow(QMainWindow):
 
     def generate_elan(self):
         """
-        Genera un archivo ELAN a partir del CSV y el video seleccionado.
-        El archivo ELAN se guarda en la carpeta "videos/ELAN_files" con el mismo nombre que el video.
+        to generate an ELAN file from the selected video and the CSV file.
+        The ELAN file is saved in the "videos/ELAN_files" folder with the same name as the video.
         """
         t = self.translations[self.language]
         if not self.video_file:
@@ -300,7 +303,7 @@ class MainWindow(QMainWindow):
             if tier == "seña":
                 segment_file = f"{annotation_text}_a_seña.avi"
                 temp_n_frames = n_frames
-                formula = np.maximum(np.log(100 / temp_n_frames), 0)#*100
+                formula = np.maximum(np.log(50 / temp_n_frames), 0)#*100
                 prev_temp_n_frames = temp_n_frames
             elif tier == "oración":
                 segment_file = f"{annotation_text}_b_oración.avi"
@@ -320,7 +323,7 @@ class MainWindow(QMainWindow):
         except Exception as e:
             self.log(t["error_loading_eaf"].format(correccion_csv_path, e))
 
-    # Funciones para abrir archivos externamente
+    # functions to open external files
     def abrir_csv(self):
         t = self.translations[self.language]
         if not self.video_file:
